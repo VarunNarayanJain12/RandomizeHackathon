@@ -1,0 +1,80 @@
+# === GLOBAL ===
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.bak
+
+# === FRONTEND (Next.js) ===
+/node_modules
+/.next
+/out
+/build
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Environment variables
+.env*
+!.env.example
+
+# Vercel deployment
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# === BACKEND (FastAPI + Python) ===
+
+# Bytecode & caches
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
+.venv/
+ENV/
+
+# Model files (ML)
+*.keras
+*.h5
+*.pkl
+*.joblib
+*.pt
+*.onnx
+*.sav
+
+# Large data files (optional)
+*.csv
+*.tsv
+*.xlsx
+*.xls
+*.json
+*.zip
+
+# Testing & coverage
+.coverage
+htmlcov/
+.tox/
+.cache/
+.pytest_cache/
+coverage.xml
+*.cover
+*.py,cover
+
+# Jupyter notebook checkpoints (if using any)
+.ipynb_checkpoints/
+
+# === IDEs and OS ===
+.vscode/
+.idea/
+*.iml
+
+echo '._*' >> .gitignore
+._*
