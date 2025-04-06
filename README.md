@@ -9,7 +9,15 @@
 ### 🔍 Online Monitoring (Real-Time)
 - Detects cheating via webcam in real-time
 - Tracks face, eye movement, and head direction
-- Instant alerts for anomalies
+- Detects if the user looks away from the screen
+- Flags when **no user is found** in the frame
+- Identifies **multiple persons** in the frame
+- Detects presence of **hands or unauthorized gestures**
+- Implements an **Erit Score system**:
+  - Starts at **100** for every user
+  - Points are **deducted based on the type/severity** of suspicious activity
+  - If score goes **below 60**, the exam is marked for **manual evaluation**
+- Each flagged activity **captures a screenshot** as evidence and stores it with a timestamp
 
 ### 🎥 Offline Monitoring
 - Upload recorded videos or **CCTV footage**
@@ -25,6 +33,7 @@
 - Flags suspicious behavior in real-time or post-processing
 - Pushes alerts to the faculty dashboard
 - Records event timestamps and logs
+- Stores screenshots for every suspicious detection
 
 ### 🧑‍🎓 Student Dashboard
 - View exam sessions and status
@@ -33,8 +42,8 @@
 
 ### 👨‍🏫 Faculty Dashboard
 - Monitor live exams or review past sessions
-- View flagged students with evidence and timestamps
-- Manage alerts and submit reports
+- View flagged students with evidence, timestamps, and screenshots
+- Manage alerts, review Erit Score status, and submit reports
 
 ### 🏫 College Website Integration
 - Dashboards embedded within the institution's portal
@@ -43,7 +52,7 @@
 
 ### 📊 Reporting System
 - Generate reports per session or student
-- Export PDFs with predictions, timestamps, and video references
+- Export PDFs with predictions, Erit Scores, timestamps, and screenshots
 - Centralized records for audits or academic review
 
 ---
@@ -52,32 +61,47 @@
 
 - 📺 **Prototype Overview**  
   🔗 [Watch here](https://drive.google.com/drive/folders/1INt6SyCqYIho9vAquzB4UuxJqMDhsM0M?usp=share_link)
-  
+
 ---
 
 ## 🛠️ Tech Stack
 
-| Layer       | Tech Used                     |
-|-------------|-------------------------------|
-| Frontend    | Next.js, Tailwind CSS, TypeScript |
-| Backend     | FastAPI (Python)              |
-| AI Model    | TensorFlow/Keras              |
-| Video Processing | OpenCV, NumPy            |
-| Data Flow   | RESTful APIs + FormData       |
-| Dashboard   | Embedded in college portal    |
-
+| Layer           | Tech Used                     |
+|------------------|-------------------------------|
+| Frontend         | Next.js, Tailwind CSS, TypeScript |
+| Backend          | FastAPI (Python)              |
+| AI Model         | TensorFlow/Keras              |
+| Video Processing | OpenCV, NumPy                 |
+| Data Flow        | RESTful APIs + FormData       |
+| Dashboard        | Embedded in college portal    |
 
 ---
 
 ## 🧪 How It Works
 
-1. **Live Exams**: AI detects cheating in real-time using webcam.
-2. **Recorded Exams**: Videos (including CCTV) are uploaded for analysis.
-3. **Alerts**: AI flags behaviors; alerts go to faculty dashboard.
+1. **Live Exams**:
+   - AI detects cheating in real-time using webcam feed.
+   - Uses detection models for faces, hands, gaze direction, multiple persons, and presence.
+   - Every student starts with an **Erit Score of 100**.
+   - Suspicious activities lead to score deduction.
+   - **If the score drops below 60**, session is escalated to manual review.
+   - Screenshots are captured for each flagged moment.
+
+2. **Recorded Exams**:
+   - Videos (including CCTV) are uploaded and processed for frame-wise analysis.
+   - Reports with predictions and flagged events are generated.
+
+3. **Alerts & Screenshots**:
+   - AI flags behaviors and generates alerts in real-time or during post-processing.
+   - Screenshots are auto-stored with timestamps and type of suspicion.
+
 4. **Dashboards**:
-   - **Students**: Track exam sessions, status, and alerts.
-   - **Faculty**: View flagged videos, submit decisions, and generate reports.
-5. **College Portal**: Dashboards are integrated to auto-fetch user data and reduce manual admin work.
+   - **Students**: Track exam sessions, status, Erit Score, and alerts.
+   - **Faculty**: View flagged sessions, review Erit Score trend, examine screenshots, and generate reports.
+
+5. **College Portal Integration**:
+   - Student/faculty dashboards are embedded within the institution's website.
+   - Eliminates data duplication and reduces manual work.
 
 ---
 
@@ -85,6 +109,5 @@
 
 1. **Clone the Repository**
    ```bash
-   git clone https://git
+   git clone https://github.com/VarunNarayanJain12/RandomizeHackathon.git
    cd examguard-ai
----
