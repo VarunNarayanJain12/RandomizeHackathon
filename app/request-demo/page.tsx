@@ -26,7 +26,7 @@ export default function RequestDemoPage() {
             title="Online Cheat Detection"
             description="AI-powered remote exam monitoring with browser lockdown and behavior analysis"
             icon={<Globe className="h-12 w-12" />}
-            videoUrl="/videos/online-demo.mp4"
+            videoUrl="OnlineTesting.mp4"
             features={[
               {
                 title: "Browser Lockdown",

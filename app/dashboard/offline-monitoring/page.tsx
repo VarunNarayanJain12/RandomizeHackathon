@@ -1,20 +1,74 @@
-import type { Metadata } from "next"
+"use client"
+
+import { useEffect, useRef, useState } from "react"
 import DashboardLayout from "@/components/dashboard/layout"
 import Breadcrumbs from "@/components/breadcrumbs"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card"
 import { Camera } from "lucide-react"
 
-export const metadata: Metadata = {
-  title: "Offline Monitoring - ExamGuard AI",
-  description: "AI-powered CCTV-based exam monitoring",
-}
 
 export default function OfflineMonitoringPage() {
   const breadcrumbItems = [
     { label: "Home", href: "/" },
     { label: "Getting Started", href: "/getting-started" },
-    { label: "Offline Monitoring", href: "/dashboard/offline-monitoring", active: true },
+    { label: "Offline Monitoring", href: "/dashboard/offline-monitoring", active: true }
   ]
+
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement | null>(null)
+  const [prediction, setPrediction] = useState("")
+
+  useEffect(() => {
+    const getCamera = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: true })
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream
+        }
+      } catch (err) {
+        console.error("Error accessing webcam:", err)
+      }
+    }
+
+    getCamera()
+  }, [])
+
+  // Send frame to backend every few seconds (mocked logic)
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (!canvasRef.current || !videoRef.current) return
+
+      const ctx = canvasRef.current.getContext("2d")
+      if (!ctx) return
+
+      ctx.drawImage(videoRef.current, 0, 0, 224, 224) // example size
+      const dataUrl = canvasRef.current.toDataURL("image/jpeg")
+
+      try {
+        const res = await fetch("http://localhost:8000/predict-yolov8", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({ image: dataUrl })
+        })
+
+        const data = await res.json()
+        setPrediction(data.result || "No result")
+      } catch (err) {
+        console.error("Prediction error:", err)
+        setPrediction("Error")
+      }
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [])
 
   return (
     <DashboardLayout>
@@ -33,17 +87,23 @@ export default function OfflineMonitoringPage() {
             </div>
             <div>
               <CardTitle>Offline Monitoring Dashboard</CardTitle>
-              <CardDescription>This is a placeholder for the CCTV-based monitoring backend.</CardDescription>
+              <CardDescription>Live CCTV feed with AI-based monitoring results below.</CardDescription>
             </div>
           </CardHeader>
           <CardContent>
-            <div className="h-[400px] flex items-center justify-center bg-secondary rounded-lg">
-              <p className="text-muted-foreground">Offline monitoring backend would be implemented here.</p>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-lg overflow-hidden border bg-secondary">
+                <video ref={videoRef} autoPlay playsInline muted className="w-full h-full" />
+              </div>
+              <div className="flex flex-col justify-center items-center bg-muted p-4 rounded-lg text-center">
+                <h3 className="text-lg font-semibold mb-2">Prediction:</h3>
+                <p className="text-muted-foreground">{prediction || "Waiting for input..."}</p>
+              </div>
             </div>
+            <canvas ref={canvasRef} width="224" height="224" className="hidden" />
           </CardContent>
         </Card>
       </div>
     </DashboardLayout>
   )
 }
-

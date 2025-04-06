@@ -77,8 +77,6 @@ export default function OnlineMonitoringPage() {
           <TabsContent value="dashboard" className="space-y-6">
           <OnlineMonitoringDashboard />
 
-          
-
         </TabsContent>
 
           <TabsContent value="students" className="space-y-6">
